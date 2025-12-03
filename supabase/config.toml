@@ -1,1 +1,10 @@
 project_id = "tqbudqreueckqgksormk"
+
+[functions.api-books]
+verify_jwt = false
+
+[functions.api-members]
+verify_jwt = false
+
+[functions.api-borrowings]
+verify_jwt = false

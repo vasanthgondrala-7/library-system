@@ -1,73 +1,230 @@
-# Welcome to your Lovable project
+# Library Management System
 
-## Project info
+A full-stack library management system built with React (TypeScript) and Lovable Cloud (Supabase).
 
-**URL**: https://lovable.dev/projects/769cc122-6c9e-471e-872b-004c069efe6a
+## Features
 
-## How can I edit this code?
+- 📚 **Book Management**: CRUD operations for books with availability tracking
+- 👥 **Member Management**: Manage library members with contact details
+- 📖 **Borrowing System**: Track book borrowings with due dates and late fees
+- 📊 **Dashboard**: Analytics overview with stats and recent activity
 
-There are several ways of editing your application.
+## Tech Stack
 
-**Use Lovable**
+### Frontend
+- **React 18** with TypeScript
+- **Vite** for fast development and building
+- **Tailwind CSS** for styling
+- **TanStack Query** for data fetching and caching
+- **React Hook Form + Zod** for form validation
+- **Shadcn/UI** components
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/769cc122-6c9e-471e-872b-004c069efe6a) and start prompting.
+### Backend (Lovable Cloud / Supabase)
+- **PostgreSQL** database
+- **Edge Functions** for RESTful API endpoints
+- **Row Level Security (RLS)** for data protection
 
-Changes made via Lovable will be committed automatically to this repo.
+## Project Structure
 
-**Use your preferred IDE**
+```
+├── src/
+│   ├── components/       # Reusable UI components
+│   │   ├── ui/          # Shadcn UI components
+│   │   ├── Layout.tsx   # Main layout wrapper
+│   │   ├── BookForm.tsx
+│   │   ├── MemberForm.tsx
+│   │   └── BorrowingForm.tsx
+│   ├── hooks/           # Custom React hooks
+│   │   ├── useBooks.ts
+│   │   ├── useMembers.ts
+│   │   └── useBorrowings.ts
+│   ├── pages/           # Page components
+│   │   ├── Dashboard.tsx
+│   │   ├── Books.tsx
+│   │   ├── Members.tsx
+│   │   └── Borrowings.tsx
+│   ├── integrations/    # Supabase client and types
+│   └── types/           # TypeScript type definitions
+├── supabase/
+│   ├── functions/       # Edge Functions (API endpoints)
+│   │   ├── api-books/
+│   │   ├── api-members/
+│   │   └── api-borrowings/
+│   └── migrations/      # Database migrations
+└── public/
+```
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Getting Started
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Prerequisites
 
-Follow these steps:
+- Node.js 18+ 
+- npm or bun
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Installation
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+1. Clone the repository:
+```bash
+git clone <your-repo-url>
+cd library-management-system
+```
 
-# Step 3: Install the necessary dependencies.
-npm i
+2. Install dependencies:
+```bash
+npm install
+```
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+3. Set up environment variables:
+```bash
+cp .env.example .env
+# Edit .env with your Supabase credentials
+```
+
+4. Start the development server:
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The app will be available at `http://localhost:8080`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Database Schema
 
-**Use GitHub Codespaces**
+### Books Table
+| Column | Type | Description |
+|--------|------|-------------|
+| id | uuid | Primary key |
+| title | text | Book title |
+| author | text | Author name |
+| isbn | text | ISBN number |
+| genre | text | Genre (optional) |
+| quantity | integer | Total copies |
+| available_quantity | integer | Available copies |
+| created_at | timestamp | Creation date |
+| updated_at | timestamp | Last update |
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Members Table
+| Column | Type | Description |
+|--------|------|-------------|
+| id | uuid | Primary key |
+| name | text | Member name |
+| email | text | Email address |
+| phone | text | Phone (optional) |
+| membership_date | date | Join date |
+| is_active | boolean | Active status |
+| created_at | timestamp | Creation date |
+| updated_at | timestamp | Last update |
 
-## What technologies are used for this project?
+### Borrowings Table
+| Column | Type | Description |
+|--------|------|-------------|
+| id | uuid | Primary key |
+| book_id | uuid | FK to books |
+| member_id | uuid | FK to members |
+| borrow_date | date | Borrow date |
+| due_date | date | Due date |
+| return_date | date | Return date (nullable) |
+| status | text | 'borrowed' or 'returned' |
+| late_fee | numeric | Late fee amount |
 
-This project is built with:
+## API Endpoints
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+All API endpoints are implemented as Edge Functions.
 
-## How can I deploy this project?
+### Books API (`/api-books`)
+- `GET /api-books` - List all books
+- `GET /api-books?id={id}` - Get single book
+- `POST /api-books` - Create book
+- `PUT /api-books?id={id}` - Update book
+- `DELETE /api-books?id={id}` - Delete book
 
-Simply open [Lovable](https://lovable.dev/projects/769cc122-6c9e-471e-872b-004c069efe6a) and click on Share -> Publish.
+### Members API (`/api-members`)
+- `GET /api-members` - List all members
+- `GET /api-members?id={id}` - Get single member
+- `POST /api-members` - Create member
+- `PUT /api-members?id={id}` - Update member
+- `DELETE /api-members?id={id}` - Delete member
 
-## Can I connect a custom domain to my Lovable project?
+### Borrowings API (`/api-borrowings`)
+- `GET /api-borrowings` - List all borrowings
+- `GET /api-borrowings?id={id}` - Get single borrowing
+- `POST /api-borrowings` - Create borrowing (borrow book)
+- `PUT /api-borrowings?id={id}&action=return` - Return book
+- `DELETE /api-borrowings?id={id}` - Delete borrowing
 
-Yes, you can!
+## API Usage Examples
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+### Create a Book
+```bash
+curl -X POST https://tqbudqreueckqgksormk.supabase.co/functions/v1/api-books \
+  -H "Content-Type: application/json" \
+  -d '{"title": "1984", "author": "George Orwell", "isbn": "978-0451524935", "quantity": 5}'
+```
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+### Borrow a Book
+```bash
+curl -X POST https://tqbudqreueckqgksormk.supabase.co/functions/v1/api-borrowings \
+  -H "Content-Type: application/json" \
+  -d '{"book_id": "uuid", "member_id": "uuid", "due_date": "2024-01-15"}'
+```
+
+### Return a Book
+```bash
+curl -X PUT "https://tqbudqreueckqgksormk.supabase.co/functions/v1/api-borrowings?id={id}&action=return"
+```
+
+## Running with Docker (Optional)
+
+```dockerfile
+FROM node:18-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+EXPOSE 8080
+CMD ["npm", "run", "preview"]
+```
+
+Build and run:
+```bash
+docker build -t library-ms .
+docker run -p 8080:8080 library-ms
+```
+
+## Seed Data
+
+To seed the database with sample data, use the API endpoints:
+
+```bash
+# Create sample books
+curl -X POST https://tqbudqreueckqgksormk.supabase.co/functions/v1/api-books \
+  -H "Content-Type: application/json" \
+  -d '{"title": "The Great Gatsby", "author": "F. Scott Fitzgerald", "isbn": "978-0743273565", "genre": "Fiction", "quantity": 3}'
+
+# Create sample member
+curl -X POST https://tqbudqreueckqgksormk.supabase.co/functions/v1/api-members \
+  -H "Content-Type: application/json" \
+  -d '{"name": "John Doe", "email": "john@example.com", "phone": "555-0123"}'
+```
+
+## Design Decisions & Assumptions
+
+1. **No Authentication**: Currently the app is open access. Add Supabase Auth for production.
+2. **Late Fee**: $1 per day late, calculated automatically on return.
+3. **Book Availability**: Automatically decremented/incremented via database triggers.
+4. **RLS Policies**: Set to allow all operations (adjust for production security).
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+## License
+
+MIT License
+
+---
+
+**URL**: https://lovable.dev/projects/769cc122-6c9e-471e-872b-004c069efe6a
