@@ -213,18 +213,3 @@ curl -X POST https://tqbudqreueckqgksormk.supabase.co/functions/v1/api-members \
 2. **Late Fee**: $1 per day late, calculated automatically on return.
 3. **Book Availability**: Automatically decremented/incremented via database triggers.
 4. **RLS Policies**: Set to allow all operations (adjust for production security).
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
-
-## License
-
-MIT License
-
----
-
-**URL**: https://lovable.dev/projects/769cc122-6c9e-471e-872b-004c069efe6a
